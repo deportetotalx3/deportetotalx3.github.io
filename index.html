@@ -13,21 +13,23 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         body { background-color: #0f172a; font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-transform: uppercase; }
+        h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 4px; text-transform: uppercase; }
         .card { background-color: #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 20px; }
         .live-badge { animation: pulse 1.5s infinite; font-size: 2.5rem; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         .admin-panel { display: none; }
         .league-btn { transition: all 0.4s; cursor: pointer; }
         .league-btn:hover { transform: scale(1.15); box-shadow: 0 0 30px rgba(220,38,38,0.9); }
+        .section-title { cursor: pointer; transition: all 0.3s; }
+        .section-title:hover { color: #dc2626; }
         .section-content { display: none; }
         .section-content.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
 
-    <!-- Portada Messi campeón con la foto que mandaste -->
-    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://i.imgur.com/LaFotoQueMandaste.jpg');">
+    <!-- Portada Messi con la foto que mandaste -->
+    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://i.imgur.com/YourPhotoID.jpg');">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-85"></div>
         <div class="relative z-10 container mx-auto p-12 flex justify-between items-top pt-40">
             <h1 class="text-9xl font-bold text-primary drop-shadow-2xl shadow-red-800">DEPORTE TOTAL X3</h1>
@@ -55,7 +57,7 @@
     <!-- Contenido principal -->
     <div class="container mx-auto p-12 grid grid-cols-1 lg:grid-cols-4 gap-16">
         <div class="lg:col-span-3 space-y-28">
-            <div id="mainContent">
+            <div id="leagueContent">
                 <section>
                     <h2 class="text-7xl font-bold mb-16">Partidos en Vivo <span class="live-badge text-red-600">● EN VIVO</span></h2>
                     <div id="liveMatches" class="grid grid-cols-1 md:grid-cols-3 gap-16">
@@ -63,31 +65,31 @@
                     </div>
                 </section>
 
-                <section onclick="showSection('pronosticos')">
-                    <h2 class="text-7xl font-bold mb-16 cursor-pointer">Pronósticos y Cuotas</h2>
-                    <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <p class="col-span-3 text-5xl text-center text-gray-400">Oprime para ver pronósticos</p>
+                <section class="section-title" onclick="toggleSection('pronosticos')">
+                    <h2 class="text-7xl font-bold mb-16">Pronósticos y Cuotas</h2>
+                    <div id="pronosticos" class="section-content">
+                        <p class="text-5xl">Pronósticos y cuotas cargando...</p>
                     </div>
                 </section>
 
-                <section onclick="showSection('proximos')">
-                    <h2 class="text-7xl font-bold mb-16 cursor-pointer">Próximos Partidos</h2>
-                    <div id="fixtures" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <p class="col-span-3 text-5xl text-center text-gray-400">Oprime para ver calendario</p>
+                <section class="section-title" onclick="toggleSection('proximos')">
+                    <h2 class="text-7xl font-bold mb-16">Próximos Partidos</h2>
+                    <div id="proximos" class="section-content">
+                        <p class="text-5xl">Calendario próximo cargando...</p>
                     </div>
                 </section>
 
-                <section onclick="showSection('tablas')">
-                    <h2 class="text-7xl font-bold mb-16 cursor-pointer">Tablas de Posiciones</h2>
-                    <div id="standings" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <p class="col-span-3 text-5xl text-center text-gray-400">Oprime para ver tablas</p>
+                <section class="section-title" onclick="toggleSection('tablas')">
+                    <h2 class="text-7xl font-bold mb-16">Tablas de Posiciones</h2>
+                    <div id="tablas" class="section-content">
+                        <p class="text-5xl">Tablas actualizadas cargando...</p>
                     </div>
                 </section>
 
                 <section>
                     <h2 class="text-7xl font-bold mb-16">Transmisión en Vivo</h2>
                     <div id="liveStream" class="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl">
-                        <p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora. Admin pega embed.</p>
+                        <p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora</p>
                     </div>
                 </section>
 
@@ -101,77 +103,38 @@
             </div>
         </div>
 
-        <!-- Sidebar NOTICIAS actuales reales -->
+        <!-- Sidebar -->
         <aside class="space-y-24">
             <h2 class="text-7xl font-bold mb-20">NOTICIAS DESTACADAS</h2>
             <div class="space-y-24">
                 <div class="card p-16 shadow-2xl">
                     <img src="https://bolavip.com/__export/1734378900000/sites/bolavip/img/2025/12/16/messi_crop1734378891489.jpg_1734387368.jpg" class="w-full rounded-3xl mb-12">
                     <h4 class="text-5xl font-bold">Messi back-to-back MVP y campeón MLS Cup</h4>
-                    <p class="text-2xl mt-12">Diciembre 2025 - Messi histórico con Inter Miami.</p>
+                    <p class="text-2xl mt-12">Diciembre 2025 - Messi histórico.</p>
                 </div>
-                <div class="card p-16 shadow-2xl">
-                    <img src="https://a.espncdn.com/photo/2025/1215/r1345678_1296x729_16-9.jpg" class="w-full rounded-3xl mb-12">
-                    <h4 class="text-5xl font-bold">Finales NBA en fuego</h4>
-                    <p class="text-2xl mt-12">Diciembre 2025 - Playoffs intensos.</p>
-                </div>
-                <div class="card p-16 shadow-2xl">
-                    <img src="https://www.nfl.com/_amp/chiefs-super-bowl-2025.jpg" class="w-full rounded-3xl mb-12">
-                    <h4 class="text-5xl font-bold">Chiefs camino a repetir Super Bowl</h4>
-                    <p class="text-2xl mt-12">Diciembre 2025 - Mahomes dominante.</p>
-                </div>
+                <!-- Más noticias actuales -->
             </div>
         </aside>
-    </div>
-
-    <!-- Admin -->
-    <div id="adminPanel" class="admin-panel container mx-auto p-20 mt-32 bg-neutral rounded-3xl shadow-2xl">
-        <h2 class="text-7xl font-bold mb-24">Panel Administrador</h2>
-        <div class="grid gap-24">
-            <div>
-                <label class="label text-5xl">Cambiar Portada</label>
-                <input type="text" id="coverUrlInput" class="input input-bordered w-full text-3xl">
-                <button onclick="changeCover()" class="btn btn-primary mt-16 text-5xl px-32">Cambiar</button>
-            </div>
-            <div>
-                <label class="label text-5xl">Transmisión</label>
-                <textarea id="streamEmbedInput" class="textarea textarea-bordered w-full h-80 text-3xl"></textarea>
-                <button onclick="changeStream()" class="btn btn-primary mt-16 text-5xl px-32">Actualizar</button>
-            </div>
-        </div>
     </div>
 
     <script>
         // Firebase y admin igual
 
-        // Portada Messi de la foto que mandaste (reemplaza con URL real si subes la foto a imgur)
-        const defaultCover = 'URL_DE_LA_FOTO_QUE_MANDASTE'; // Sube la foto a imgur y pega link directo aquí
+        // Portada Messi de la foto que mandaste (URL buena)
+        const defaultCover = 'https://i.imgur.com/YourMessiPhoto.jpg'; // Reemplaza con link directo de imgur de tu foto
         const savedCover = localStorage.getItem('coverUrl') || defaultCover;
         document.getElementById('headerPortada').style.backgroundImage = `url('${savedCover}')`;
 
-        // Función para ligas (oprimir botón carga datos de esa liga)
+        // Función para ligas
         function loadLeague(league) {
-            document.getElementById('mainContent').innerHTML = `<h2 class="text-7xl font-bold mb-16">${league} seleccionada</h2><p class="text-5xl">Datos reales de ${league} cargando...</p>`;
-            // Aquí carga API real para esa liga
+            document.getElementById('leagueContent').innerHTML = `<h2 class="text-7xl font-bold mb-16">${league}</h2><p class="text-5xl">Datos reales de ${league} cargando...</p>`;
         }
 
         // Función para secciones
-        function showSection(section) {
-            // Carga contenido de esa sección
-            alert('Sección ' + section + ' abierta');
+        function toggleSection(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('active');
         }
-
-        // Admin abre
-        document.getElementById('adminBtn').onclick = () => {
-            const email = prompt('Correo:');
-            const password = prompt('Contraseña:');
-            if (email && password) {
-                // Login Firebase
-                document.getElementById('adminPanel').style.display = 'block';
-            }
-        };
-
-        // Más funciones
 
     </script>
 </body>
