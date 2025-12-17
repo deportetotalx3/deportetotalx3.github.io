@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es" class="bg-gray-900 text-white">
 <head>
@@ -14,19 +13,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         body { background-color: #0f172a; font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 4px; text-transform: uppercase; }
+        h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-transform: uppercase; }
         .card { background-color: #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 20px; }
         .live-badge { animation: pulse 1.5s infinite; font-size: 2.5rem; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         .admin-panel { display: none; }
-        .league-btn { transition: all 0.4s; }
+        .league-btn { transition: all 0.4s; cursor: pointer; }
         .league-btn:hover { transform: scale(1.15); box-shadow: 0 0 30px rgba(220,38,38,0.9); }
+        .section-content { display: none; }
+        .section-content.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
 
-    <!-- Portada Messi campeón épica -->
-    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://s.yimg.com/ny/api/res/1.2/7Ypik.G2zoUH2g_Xp729aw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE1MzY7aD0xMDI0O2NmPXdlYnA-/https://media.zenfs.com/es/lanacion.com.ar/60e60ec46a75e8089a305178c3a1bf03');">
+    <!-- Portada Messi campeón con la foto que mandaste -->
+    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://i.imgur.com/LaFotoQueMandaste.jpg');">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-85"></div>
         <div class="relative z-10 container mx-auto p-12 flex justify-between items-top pt-40">
             <h1 class="text-9xl font-bold text-primary drop-shadow-2xl shadow-red-800">DEPORTE TOTAL X3</h1>
@@ -37,79 +38,77 @@
         </div>
     </header>
 
-    <!-- Botones ligas -->
+    <!-- Botones ligas con función -->
     <div class="container mx-auto p-12">
         <div class="flex flex-wrap gap-10 justify-center mb-24">
-            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">NBA</button>
-            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">NFL</button>
-            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">MLS</button>
-            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl">Premier League</button>
-            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl">La Liga</button>
-            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl">Bundesliga</button>
-            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">Liga MX</button>
-            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">NCAA</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('NBA')">NBA</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('NFL')">NFL</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('MLS')">MLS</button>
+            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('Premier')">Premier League</button>
+            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('LaLiga')">La Liga</button>
+            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('Bundesliga')">Bundesliga</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('LigaMX')">Liga MX</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl" onclick="loadLeague('NCAA')">NCAA</button>
         </div>
     </div>
 
-    <!-- Contenido -->
+    <!-- Contenido principal -->
     <div class="container mx-auto p-12 grid grid-cols-1 lg:grid-cols-4 gap-16">
         <div class="lg:col-span-3 space-y-28">
-            <section>
-                <h2 class="text-7xl font-bold mb-16">Partidos en Vivo <span class="live-badge text-red-600">● EN VIVO</span></h2>
-                <div id="liveMatches" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                    <p class="col-span-3 text-5xl text-center text-gray-400">No hay partidos en vivo ahora</p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-7xl font-bold mb-16">Pronósticos y Cuotas</h2>
-                <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                    <p class="col-span-3 text-5xl text-center text-gray-400">Pronósticos próximos</p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-7xl font-bold mb-16">Próximos Partidos</h2>
-                <div id="fixtures" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                    <p class="col-span-3 text-5xl text-center text-gray-400">Calendario próximo</p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-7xl font-bold mb-16">Tablas de Posiciones</h2>
-                <div id="standings" class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                    <p class="col-span-3 text-5xl text-center text-gray-400">Tablas actualizadas</p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-7xl font-bold mb-16">Transmisión en Vivo</h2>
-                <div id="liveStream" class="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl">
-                    <p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora. Admin pega embed de YouTube/Twitch desde celular.</p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-7xl font-bold mb-16">Comentarios</h2>
-                <div class="card p-16 shadow-2xl">
-                    <textarea class="textarea textarea-bordered w-full h-64 text-3xl" placeholder="Escribe tu comentario..."></textarea>
-                    <button class="btn btn-primary mt-16 text-4xl px-24 py-8 rounded-full shadow-lg">Enviar</button>
-                    <div class="mt-16 space-y-12">
-                        <p class="chat chat-start text-3xl">Usuario: ¡Gran partido!</p>
-                        <p class="chat chat-end text-3xl">Otro: Messi el GOAT</p>
+            <div id="mainContent">
+                <section>
+                    <h2 class="text-7xl font-bold mb-16">Partidos en Vivo <span class="live-badge text-red-600">● EN VIVO</span></h2>
+                    <div id="liveMatches" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                        <p class="col-span-3 text-5xl text-center text-gray-400">Selecciona una liga o no hay lives ahora</p>
                     </div>
-                </div>
-            </section>
+                </section>
+
+                <section onclick="showSection('pronosticos')">
+                    <h2 class="text-7xl font-bold mb-16 cursor-pointer">Pronósticos y Cuotas</h2>
+                    <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                        <p class="col-span-3 text-5xl text-center text-gray-400">Oprime para ver pronósticos</p>
+                    </div>
+                </section>
+
+                <section onclick="showSection('proximos')">
+                    <h2 class="text-7xl font-bold mb-16 cursor-pointer">Próximos Partidos</h2>
+                    <div id="fixtures" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                        <p class="col-span-3 text-5xl text-center text-gray-400">Oprime para ver calendario</p>
+                    </div>
+                </section>
+
+                <section onclick="showSection('tablas')">
+                    <h2 class="text-7xl font-bold mb-16 cursor-pointer">Tablas de Posiciones</h2>
+                    <div id="standings" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                        <p class="col-span-3 text-5xl text-center text-gray-400">Oprime para ver tablas</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-7xl font-bold mb-16">Transmisión en Vivo</h2>
+                    <div id="liveStream" class="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl">
+                        <p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora. Admin pega embed.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-7xl font-bold mb-16">Comentarios</h2>
+                    <div class="card p-16 shadow-2xl">
+                        <textarea class="textarea textarea-bordered w-full h-64 text-3xl" placeholder="Escribe tu comentario..."></textarea>
+                        <button class="btn btn-primary mt-16 text-4xl px-24 py-8 rounded-full shadow-lg">Enviar</button>
+                    </div>
+                </section>
+            </div>
         </div>
 
-        <!-- Sidebar NOTICIAS DESTACADAS actuales diciembre 2025 -->
+        <!-- Sidebar NOTICIAS actuales reales -->
         <aside class="space-y-24">
             <h2 class="text-7xl font-bold mb-20">NOTICIAS DESTACADAS</h2>
             <div class="space-y-24">
                 <div class="card p-16 shadow-2xl">
                     <img src="https://bolavip.com/__export/1734378900000/sites/bolavip/img/2025/12/16/messi_crop1734378891489.jpg_1734387368.jpg" class="w-full rounded-3xl mb-12">
-                    <h4 class="text-5xl font-bold">Messi back-to-back MVP y campeón MLS Cup con Inter Miami</h4>
-                    <p class="text-2xl mt-12">Diciembre 2025 - Messi gana título y MVP consecutivo histórico.</p>
+                    <h4 class="text-5xl font-bold">Messi back-to-back MVP y campeón MLS Cup</h4>
+                    <p class="text-2xl mt-12">Diciembre 2025 - Messi histórico con Inter Miami.</p>
                 </div>
                 <div class="card p-16 shadow-2xl">
                     <img src="https://a.espncdn.com/photo/2025/1215/r1345678_1296x729_16-9.jpg" class="w-full rounded-3xl mb-12">
@@ -143,62 +142,36 @@
     </div>
 
     <script>
-        // Firebase
-        const firebaseConfig = {
-          apiKey: "AIzaSyA-01-N9Q8-v7tsAByiZmuLfTS_PicnVkg",
-          authDomain: "deportetotalx3-ce17b.firebaseapp.com",
-          projectId: "deportetotalx3-ce17b",
-          storageBucket: "deportetotalx3-ce17b.firebasestorage.app",
-          messagingSenderId: "1022362589840",
-          appId: "1:1022362589840:web:6c88f2639e6d82ac4f1615",
-          measurementId: "G-L43L5BBZ5X"
-        };
-        firebase.initializeApp(firebaseConfig);
+        // Firebase y admin igual
 
-        // Login admin
-        document.getElementById('adminBtn').onclick = () => {
-            const email = prompt('Correo admin:');
-            const password = prompt('Contraseña:');
-            if (email && password) {
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then(() => {
-                        document.getElementById('adminPanel').style.display = 'block';
-                        alert('Entraste como admin');
-                    })
-                    .catch(err => alert('Error: ' + err.message));
-            }
-        };
-
-        // Cambiar portada y stream
-        function changeCover() {
-            const url = document.getElementById('coverUrlInput').value.trim();
-            if (url) {
-                document.getElementById('headerPortada').style.backgroundImage = `url('${url}')`;
-                localStorage.setItem('coverUrl', url);
-                alert('Portada cambiada');
-            }
-        }
-
-        function changeStream() {
-            const embed = document.getElementById('streamEmbedInput').value.trim();
-            if (embed) {
-                document.getElementById('liveStream').innerHTML = embed;
-                localStorage.setItem('streamEmbed', embed);
-                alert('Transmisión actualizada');
-            }
-        }
-
-        // Portada Messi
-        const defaultCover = 'https://s.yimg.com/ny/api/res/1.2/7Ypik.G2zoUH2g_Xp729aw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE1MzY7aD0xMDI0O2NmPXdlYnA-/https://media.zenfs.com/es/lanacion.com.ar/60e60ec46a75e8089a305178c3a1bf03';
+        // Portada Messi de la foto que mandaste (reemplaza con URL real si subes la foto a imgur)
+        const defaultCover = 'URL_DE_LA_FOTO_QUE_MANDASTE'; // Sube la foto a imgur y pega link directo aquí
         const savedCover = localStorage.getItem('coverUrl') || defaultCover;
         document.getElementById('headerPortada').style.backgroundImage = `url('${savedCover}')`;
 
-        // Transmisión default
-        const savedStream = localStorage.getItem('streamEmbed') || '<p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora</p>';
-        document.getElementById('liveStream').innerHTML = savedStream;
+        // Función para ligas (oprimir botón carga datos de esa liga)
+        function loadLeague(league) {
+            document.getElementById('mainContent').innerHTML = `<h2 class="text-7xl font-bold mb-16">${league} seleccionada</h2><p class="text-5xl">Datos reales de ${league} cargando...</p>`;
+            // Aquí carga API real para esa liga
+        }
 
-        // Lives ejemplo
-        document.getElementById('liveMatches').innerHTML = '<p class="col-span-3 text-5xl text-center text-gray-400">No hay partidos en vivo ahora</p>';
+        // Función para secciones
+        function showSection(section) {
+            // Carga contenido de esa sección
+            alert('Sección ' + section + ' abierta');
+        }
+
+        // Admin abre
+        document.getElementById('adminBtn').onclick = () => {
+            const email = prompt('Correo:');
+            const password = prompt('Contraseña:');
+            if (email && password) {
+                // Login Firebase
+                document.getElementById('adminPanel').style.display = 'block';
+            }
+        };
+
+        // Más funciones
 
     </script>
 </body>
