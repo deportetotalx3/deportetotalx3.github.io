@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" class="bg-gray-900 text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEPORTE TOTAL X3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#dc2626', // Rojo fuerte
+                        secondary: '#1d4ed8', // Azul
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a; }
+        .card { background-color: #1f2937; }
+        .live-badge { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .admin-panel { display: none; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+
+    <!-- Portada Messi campeón -->
+    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1673881120894-3d9c6c0d2f1e?auto=format&fit=crop&w=2070&q=80');">
+        <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+        <div class="relative z-10 container mx-auto p-6 flex justify-between items-center">
+            <h1 class="text-6xl font-bold text-primary">DEPORTE TOTAL X3</h1>
+            <button id="adminBtn" class="btn btn-primary">Admin</button>
+        </div>
+        <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center">
+            <p class="text-3xl">Resultados, pronósticos y transmisiones en vivo</p>
+        </div>
+    </header>
+
+    <!-- Botones ligas -->
+    <div class="container mx-auto p-6">
+        <div class="flex flex-wrap gap-4 justify-center mb-12">
+            <button class="btn btn-primary rounded-full">NBA</button>
+            <button class="btn btn-primary rounded-full">NFL</button>
+            <button class="btn btn-primary rounded-full">MLS</button>
+            <button class="btn btn-secondary rounded-full">Premier League</button>
+            <button class="btn btn-secondary rounded-full">La Liga</button>
+            <button class="btn btn-secondary rounded-full">Bundesliga</button>
+            <button class="btn btn-primary rounded-full">Liga MX</button>
+            <button class="btn btn-primary rounded-full">NCAA</button>
+        </div>
+    </div>
+
+    <!-- Contenido principal con sidebar -->
+    <div class="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div class="lg:col-span-3 space-y-12">
+            <!-- Partidos en vivo -->
+            <section>
+                <h2 class="text-4xl font-bold mb-6">Partidos en Vivo <span class="badge badge-error live-badge">EN VIVO</span></h2>
+                <div id="liveMatches" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Pronósticos -->
+            <section>
+                <h2 class="text-4xl font-bold mb-6">Pronósticos y Cuotas</h2>
+                <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!--
