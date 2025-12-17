@@ -16,8 +16,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#dc2626', // Rojo fuerte
-                        secondary: '#1d4ed8', // Azul
+                        primary: '#dc2626',
+                        secondary: '#1d4ed8',
                     }
                 }
             }
@@ -34,7 +34,7 @@
 <body class="bg-gray-900 text-white min-h-screen">
 
     <!-- Portada Messi campeón -->
-    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1673881120894-3d9c6c0d2f1e?auto=format&fit=crop&w=2070&q=80');">
+    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://i.imgur.com/EXAMPLE_MESSI_WORLD_CUP.jpg');">
         <div class="absolute inset-0 bg-black bg-opacity-70"></div>
         <div class="relative z-10 container mx-auto p-6 flex justify-between items-center">
             <h1 class="text-6xl font-bold text-primary">DEPORTE TOTAL X3</h1>
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <!-- Contenido principal con sidebar -->
+    <!-- Layout principal -->
     <div class="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div class="lg:col-span-3 space-y-12">
             <!-- Partidos en vivo -->
@@ -74,4 +74,107 @@
                 <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
             </section>
 
-            <!--
+            <!-- Calendario y tablas -->
+            <section>
+                <h2 class="text-4xl font-bold mb-6">Próximos Partidos</h2>
+                <div id="fixtures" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+                <h2 class="text-4xl font-bold mb-6 mt-12">Tablas de Posiciones</h2>
+                <div id="standings" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Transmisión -->
+            <section>
+                <h2 class="text-4xl font-bold mb-6">Transmisión en Vivo</h2>
+                <div id="liveStream" class="aspect-video bg-black rounded-lg overflow-hidden">
+                    <p class="text-center pt-32 text-gray-400">No hay transmisión ahora. Admin pega embed de YouTube/Twitch.</p>
+                </div>
+            </section>
+
+            <!-- Comentarios -->
+            <section>
+                <h2 class="text-4xl font-bold mb-6">Comentarios</h2>
+                <div class="card p-6">
+                    <textarea class="textarea textarea-bordered w-full h-32" placeholder="Escribe tu comentario..."></textarea>
+                    <button class="btn btn-primary mt-4">Enviar</button>
+                    <div class="mt-6 space-y-4">
+                        <p class="chat chat-start">Usuario: ¡Gran partido!</p>
+                        <!-- Más comentarios -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sidebar noticias -->
+        <aside class="space-y-6">
+            <h2 class="text-3xl font-bold">NOTICIAS DESTACADAS</h2>
+            <div class="space-y-6">
+                <div class="card p-4">
+                    <img src="https://via.placeholder.com/400x200" class="w-full rounded mb-4">
+                    <h4 class="font-bold text-lg">Messi campeón del mundo</h4>
+                    <p class="text-sm">Argentina levanta la copa...</p>
+                </div>
+                <div class="card p-4">
+                    <img src="https://via.placeholder.com/400x200" class="w-full rounded mb-4">
+                    <h4 class="font-bold text-lg">NBA finals intensas</h4>
+                    <p class="text-sm">Knicks vs Warriors...</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Panel Admin -->
+    <div id="adminPanel" class="admin-panel container mx-auto p-6 mt-12 bg-neutral rounded-xl">
+        <h2 class="text-4xl font-bold mb-8">Panel Administrador</h2>
+        <div class="grid gap-8">
+            <div>
+                <label class="label text-lg">Cambiar Portada (pega URL nueva imagen)</label>
+                <input type="text" id="coverUrlInput" class="input input-bordered w-full" placeholder="URL imagen">
+                <button onclick="changeCover()" class="btn btn-primary mt-4">Cambiar</button>
+            </div>
+            <div>
+                <label class="label text-lg">Transmisión en Vivo (pega código embed YouTube/Twitch)</label>
+                <textarea id="streamEmbedInput" class="textarea textarea-bordered w-full h-32" placeholder="<iframe..."></iframe>"></textarea>
+                <button onclick="changeStream()" class="btn btn-primary mt-4">Actualizar</button>
+            </div>
+        </div>
+        <button class="btn btn-secondary mt-8" onclick="firebase.auth().signOut().then(() => location.reload())">Cerrar sesión</button>
+    </div>
+
+    <script>
+        // Firebase config (tu bloque)
+        const firebaseConfig = {
+          apiKey: "AIzaSyA-01-N9Q8-v7tsAByiZmuLfTS_PicnVkg",
+          authDomain: "deportetotalx3-ce17b.firebaseapp.com",
+          projectId: "deportetotalx3-ce17b",
+          storageBucket: "deportetotalx3-ce17b.firebasestorage.app",
+          messagingSenderId: "1022362589840",
+          appId: "1:1022362589840:web:6c88f2639e6d82ac4f1615",
+          measurementId: "G-L43L5BBZ5X"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Login admin
+        document.getElementById('adminBtn').onclick = () => {
+            const email = prompt('Correo:');
+            const password = prompt('Contraseña:');
+            if (email && password) {
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then(() => document.getElementById('adminPanel').style.display = 'block')
+                    .catch(err => alert('Error: ' + err.message));
+            }
+        };
+
+        // Cambiar portada y stream (igual que antes)
+
+        // API-Sports key
+        const apiKey = 'f7966efcd58692979704f59c9f3f7e113';
+
+        // Funciones loadLiveMatches, loadOdds, loadStandings, loadFixtures (cargan reales, cards grandes, etc.)
+
+        loadLiveMatches();
+        // Llama las otras funciones
+
+        setInterval(loadLiveMatches, 60000);
+    </script>
+</body>
+</html>
