@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="es" class="bg-gray-900 text-white">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEPORTE TOTAL X3</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,149 +13,193 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
-        body { background-color: #0f172a; font-family: 'Roboto', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-transform: uppercase; }
+        body { background-color: #0f172a; font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 4px; text-transform: uppercase; }
         .card { background-color: #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 20px; }
-        .live-badge { animation: pulse 1.5s infinite; font-size: 2rem; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .live-badge { animation: pulse 1.5s infinite; font-size: 2.5rem; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         .admin-panel { display: none; }
-        .league-btn { transition: all 0.3s; }
-        .league-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(220,38,38,0.8); }
+        .league-btn { transition: all 0.4s; }
+        .league-btn:hover { transform: scale(1.15); box-shadow: 0 0 30px rgba(220,38,38,0.9); }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
 
     <!-- Portada Messi campeón épica -->
-    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://ca-times.brightspotcdn.com/dims4/default/9bf971b/2147483647/strip/false/crop/4276x2405+0+0/resize/1920x1080!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F71%2Fda%2Fb2a60e6d4cf2999256438a1d94ed%2Faptopix-wcup-argentina-france-soccer-08454.jpg');">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-90"></div>
-        <div class="relative z-10 container mx-auto p-12 flex justify-between items-top pt-32">
-            <h1 class="text-9xl font-bold text-primary drop-shadow-2xl shadow-red-600">DEPORTE TOTAL X3</h1>
-            <button id="adminBtn" class="btn btn-primary text-3xl px-12 py-6 rounded-full shadow-2xl">Admin</button>
+    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://s.yimg.com/ny/api/res/1.2/7Ypik.G2zoUH2g_Xp729aw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE1MzY7aD0xMDI0O2NmPXdlYnA-/https://media.zenfs.com/es/lanacion.com.ar/60e60ec46a75e8089a305178c3a1bf03');">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-85"></div>
+        <div class="relative z-10 container mx-auto p-12 flex justify-between items-top pt-40">
+            <h1 class="text-9xl font-bold text-primary drop-shadow-2xl shadow-red-800">DEPORTE TOTAL X3</h1>
+            <button id="adminBtn" class="btn btn-primary text-4xl px-16 py-8 rounded-full shadow-2xl">Admin</button>
         </div>
-        <div class="absolute bottom-48 left-1/2 transform -translate-x-1/2 text-center">
+        <div class="absolute bottom-60 left-1/2 transform -translate-x-1/2 text-center">
             <p class="text-5xl drop-shadow-2xl">Resultados, pronósticos y transmisiones en vivo</p>
         </div>
     </header>
 
     <!-- Botones ligas -->
     <div class="container mx-auto p-12">
-        <div class="flex flex-wrap gap-8 justify-center mb-20">
-            <button class="league-btn btn btn-primary rounded-full text-3xl px-12 py-6">NBA</button>
-            <button class="league-btn btn btn-primary rounded-full text-3xl px-12 py-6">NFL</button>
-            <button class="league-btn btn btn-primary rounded-full text-3xl px-12 py-6">MLS</button>
-            <button class="league-btn btn btn-secondary rounded-full text-3xl px-12 py-6">Premier League</button>
-            <button class="league-btn btn btn-secondary rounded-full text-3xl px-12 py-6">La Liga</button>
-            <button class="league-btn btn btn-secondary rounded-full text-3xl px-12 py-6">Bundesliga</button>
-            <button class="league-btn btn btn-primary rounded-full text-3xl px-12 py-6">Liga MX</button>
-            <button class="league-btn btn btn-primary rounded-full text-3xl px-12 py-6">NCAA</button>
+        <div class="flex flex-wrap gap-10 justify-center mb-24">
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">NBA</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">NFL</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">MLS</button>
+            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl">Premier League</button>
+            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl">La Liga</button>
+            <button class="league-btn btn btn-secondary rounded-full text-4xl px-16 py-8 shadow-2xl">Bundesliga</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">Liga MX</button>
+            <button class="league-btn btn btn-primary rounded-full text-4xl px-16 py-8 shadow-2xl">NCAA</button>
         </div>
     </div>
 
     <!-- Contenido -->
     <div class="container mx-auto p-12 grid grid-cols-1 lg:grid-cols-4 gap-16">
-        <div class="lg:col-span-3 space-y-24">
+        <div class="lg:col-span-3 space-y-28">
             <section>
-                <h2 class="text-7xl font-bold mb-12">Partidos en Vivo <span class="live-badge text-red-600">● EN VIVO</span></h2>
-                <div id="liveMatches" class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <p class="col-span-3 text-4xl text-center text-gray-400">No hay partidos en vivo ahora</p>
+                <h2 class="text-7xl font-bold mb-16">Partidos en Vivo <span class="live-badge text-red-600">● EN VIVO</span></h2>
+                <div id="liveMatches" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <p class="col-span-3 text-5xl text-center text-gray-400">No hay partidos en vivo ahora</p>
                 </div>
             </section>
 
             <section>
-                <h2 class="text-7xl font-bold mb-12">Pronósticos y Cuotas</h2>
-                <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <p class="col-span-3 text-4xl text-center text-gray-400">Pronósticos próximos</p>
+                <h2 class="text-7xl font-bold mb-16">Pronósticos y Cuotas</h2>
+                <div id="oddsSection" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <p class="col-span-3 text-5xl text-center text-gray-400">Pronósticos próximos</p>
                 </div>
             </section>
 
             <section>
-                <h2 class="text-7xl font-bold mb-12">Próximos Partidos</h2>
-                <div id="fixtures" class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <p class="col-span-3 text-4xl text-center text-gray-400">Calendario próximo</p>
+                <h2 class="text-7xl font-bold mb-16">Próximos Partidos</h2>
+                <div id="fixtures" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <p class="col-span-3 text-5xl text-center text-gray-400">Calendario próximo</p>
                 </div>
             </section>
 
             <section>
-                <h2 class="text-7xl font-bold mb-12">Tablas de Posiciones</h2>
-                <div id="standings" class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <p class="col-span-3 text-4xl text-center text-gray-400">Tablas actualizadas</p>
+                <h2 class="text-7xl font-bold mb-16">Tablas de Posiciones</h2>
+                <div id="standings" class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <p class="col-span-3 text-5xl text-center text-gray-400">Tablas actualizadas</p>
                 </div>
             </section>
 
             <section>
-                <h2 class="text-7xl font-bold mb-12">Transmisión en Vivo</h2>
+                <h2 class="text-7xl font-bold mb-16">Transmisión en Vivo</h2>
                 <div id="liveStream" class="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl">
-                    <p class="text-center pt-64 text-4xl text-gray-400">No hay transmisión ahora. Admin pega embed de YouTube/Twitch desde celular.</p>
+                    <p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora. Admin pega embed de YouTube/Twitch desde celular.</p>
                 </div>
             </section>
 
             <section>
-                <h2 class="text-7xl font-bold mb-12">Comentarios</h2>
-                <div class="card p-12 shadow-2xl">
-                    <textarea class="textarea textarea-bordered w-full h-48 text-2xl" placeholder="Escribe tu comentario..."></textarea>
-                    <button class="btn btn-primary mt-10 text-3xl px-20 py-6 rounded-full shadow-lg">Enviar</button>
-                    <div class="mt-12 space-y-8">
-                        <p class="chat chat-start text-2xl">Usuario: ¡Gran partido!</p>
-                        <p class="chat chat-end text-2xl">Otro: Messi el GOAT</p>
+                <h2 class="text-7xl font-bold mb-16">Comentarios</h2>
+                <div class="card p-16 shadow-2xl">
+                    <textarea class="textarea textarea-bordered w-full h-64 text-3xl" placeholder="Escribe tu comentario..."></textarea>
+                    <button class="btn btn-primary mt-16 text-4xl px-24 py-8 rounded-full shadow-lg">Enviar</button>
+                    <div class="mt-16 space-y-12">
+                        <p class="chat chat-start text-3xl">Usuario: ¡Gran partido!</p>
+                        <p class="chat chat-end text-3xl">Otro: Messi el GOAT</p>
                     </div>
                 </div>
             </section>
         </div>
 
         <!-- Sidebar NOTICIAS DESTACADAS actuales diciembre 2025 -->
-        <aside class="space-y-20">
-            <h2 class="text-7xl font-bold mb-16">NOTICIAS DESTACADAS</h2>
-            <div class="space-y-20">
-                <div class="card p-12 shadow-2xl">
-                    <img src="https://bolavip.com/__export/1734378900000/sites/bolavip/img/2025/12/16/messi_crop1734378891489.jpg_1734387368.jpg" class="w-full rounded-3xl mb-10">
-                    <h4 class="text-4xl font-bold">Messi back-to-back MVP y campeón MLS Cup con Inter Miami</h4>
-                    <p class="text-xl mt-8">Diciembre 2025 - Messi gana título y MVP consecutivo histórico.</p>
+        <aside class="space-y-24">
+            <h2 class="text-7xl font-bold mb-20">NOTICIAS DESTACADAS</h2>
+            <div class="space-y-24">
+                <div class="card p-16 shadow-2xl">
+                    <img src="https://bolavip.com/__export/1734378900000/sites/bolavip/img/2025/12/16/messi_crop1734378891489.jpg_1734387368.jpg" class="w-full rounded-3xl mb-12">
+                    <h4 class="text-5xl font-bold">Messi back-to-back MVP y campeón MLS Cup con Inter Miami</h4>
+                    <p class="text-2xl mt-12">Diciembre 2025 - Messi gana título y MVP consecutivo histórico.</p>
                 </div>
-                <div class="card p-12 shadow-2xl">
-                    <img src="https://a.espncdn.com/photo/2025/1215/r1345678_1296x729_16-9.jpg" class="w-full rounded-3xl mb-10">
-                    <h4 class="text-4xl font-bold">Finales NBA intensas</h4>
-                    <p class="text-xl mt-8">Diciembre 2025 - Playoffs en fuego.</p>
+                <div class="card p-16 shadow-2xl">
+                    <img src="https://a.espncdn.com/photo/2025/1215/r1345678_1296x729_16-9.jpg" class="w-full rounded-3xl mb-12">
+                    <h4 class="text-5xl font-bold">Finales NBA en fuego</h4>
+                    <p class="text-2xl mt-12">Diciembre 2025 - Playoffs intensos.</p>
                 </div>
-                <div class="card p-12 shadow-2xl">
-                    <img src="https://www.nfl.com/_amp/chiefs-super-bowl-2025.jpg" class="w-full rounded-3xl mb-10">
-                    <h4 class="text-4xl font-bold">Chiefs camino a repetir Super Bowl</h4>
-                    <p class="text-xl mt-8">Diciembre 2025 - Mahomes dominante.</p>
-                </div>
-                <div class="card p-12 shadow-2xl">
-                    <img src="https://e00-marca.uecdn.es/assets/multimedia/imagenes/2025/12/16/17343700000000.jpg" class="w-full rounded-3xl mb-10">
-                    <h4 class="text-4xl font-bold">Real Madrid invicto La Liga</h4>
-                    <p class="text-xl mt-8">Diciembre 2025 - Mbappé en racha.</p>
+                <div class="card p-16 shadow-2xl">
+                    <img src="https://www.nfl.com/_amp/chiefs-super-bowl-2025.jpg" class="w-full rounded-3xl mb-12">
+                    <h4 class="text-5xl font-bold">Chiefs camino a repetir Super Bowl</h4>
+                    <p class="text-2xl mt-12">Diciembre 2025 - Mahomes dominante.</p>
                 </div>
             </div>
         </aside>
     </div>
 
     <!-- Admin -->
-    <div id="adminPanel" class="admin-panel container mx-auto p-16 mt-24 bg-neutral rounded-3xl shadow-2xl">
-        <h2 class="text-7xl font-bold mb-20">Panel Administrador</h2>
-        <div class="grid gap-20">
+    <div id="adminPanel" class="admin-panel container mx-auto p-20 mt-32 bg-neutral rounded-3xl shadow-2xl">
+        <h2 class="text-7xl font-bold mb-24">Panel Administrador</h2>
+        <div class="grid gap-24">
             <div>
-                <label class="label text-4xl">Cambiar Portada</label>
-                <input type="text" id="coverUrlInput" class="input input-bordered w-full text-2xl">
-                <button onclick="changeCover()" class="btn btn-primary mt-12 text-4xl px-20">Cambiar</button>
+                <label class="label text-5xl">Cambiar Portada</label>
+                <input type="text" id="coverUrlInput" class="input input-bordered w-full text-3xl">
+                <button onclick="changeCover()" class="btn btn-primary mt-16 text-5xl px-32">Cambiar</button>
             </div>
             <div>
-                <label class="label text-4xl">Transmisión</label>
-                <textarea id="streamEmbedInput" class="textarea textarea-bordered w-full h-64 text-2xl"></textarea>
-                <button onclick="changeStream()" class="btn btn-primary mt-12 text-4xl px-20">Actualizar</button>
+                <label class="label text-5xl">Transmisión</label>
+                <textarea id="streamEmbedInput" class="textarea textarea-bordered w-full h-80 text-3xl"></textarea>
+                <button onclick="changeStream()" class="btn btn-primary mt-16 text-5xl px-32">Actualizar</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Firebase y funciones
+        // Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyA-01-N9Q8-v7tsAByiZmuLfTS_PicnVkg",
+          authDomain: "deportetotalx3-ce17b.firebaseapp.com",
+          projectId: "deportetotalx3-ce17b",
+          storageBucket: "deportetotalx3-ce17b.firebasestorage.app",
+          messagingSenderId: "1022362589840",
+          appId: "1:1022362589840:web:6c88f2639e6d82ac4f1615",
+          measurementId: "G-L43L5BBZ5X"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Login admin
+        document.getElementById('adminBtn').onclick = () => {
+            const email = prompt('Correo admin:');
+            const password = prompt('Contraseña:');
+            if (email && password) {
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        document.getElementById('adminPanel').style.display = 'block';
+                        alert('Entraste como admin');
+                    })
+                    .catch(err => alert('Error: ' + err.message));
+            }
+        };
+
+        // Cambiar portada y stream
+        function changeCover() {
+            const url = document.getElementById('coverUrlInput').value.trim();
+            if (url) {
+                document.getElementById('headerPortada').style.backgroundImage = `url('${url}')`;
+                localStorage.setItem('coverUrl', url);
+                alert('Portada cambiada');
+            }
+        }
+
+        function changeStream() {
+            const embed = document.getElementById('streamEmbedInput').value.trim();
+            if (embed) {
+                document.getElementById('liveStream').innerHTML = embed;
+                localStorage.setItem('streamEmbed', embed);
+                alert('Transmisión actualizada');
+            }
+        }
 
         // Portada Messi
-        const defaultCover = 'https://ca-times.brightspotcdn.com/dims4/default/9bf971b/2147483647/strip/false/crop/4276x2405+0+0/resize/1920x1080!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F71%2Fda%2Fb2a60e6d4cf2999256438a1d94ed%2Faptopix-wcup-argentina-france-soccer-08454.jpg';
+        const defaultCover = 'https://s.yimg.com/ny/api/res/1.2/7Ypik.G2zoUH2g_Xp729aw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE1MzY7aD0xMDI0O2NmPXdlYnA-/https://media.zenfs.com/es/lanacion.com.ar/60e60ec46a75e8089a305178c3a1bf03';
         const savedCover = localStorage.getItem('coverUrl') || defaultCover;
         document.getElementById('headerPortada').style.backgroundImage = `url('${savedCover}')`;
 
-        // Otras funciones
+        // Transmisión default
+        const savedStream = localStorage.getItem('streamEmbed') || '<p class="text-center pt-80 text-5xl text-gray-400">No hay transmisión ahora</p>';
+        document.getElementById('liveStream').innerHTML = savedStream;
+
+        // Lives ejemplo
+        document.getElementById('liveMatches').innerHTML = '<p class="col-span-3 text-5xl text-center text-gray-400">No hay partidos en vivo ahora</p>';
+
     </script>
 </body>
 </html>
