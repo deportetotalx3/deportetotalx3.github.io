@@ -16,8 +16,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#dc2626',
-                        secondary: '#1d4ed8',
+                        primary: '#dc2626', // Rojo
+                        secondary: '#1d4ed8', // Azul
                     }
                 }
             }
@@ -34,7 +34,7 @@
 <body class="bg-gray-900 text-white min-h-screen">
 
     <!-- Portada Messi campeón -->
-    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://i.imgur.com/EXAMPLE_MESSI_WORLD_CUP.jpg');">
+    <header id="headerPortada" class="relative h-screen bg-cover bg-center" style="background-image: url('https://wallpapercave.com/wp/wp12551397.jpg');">
         <div class="absolute inset-0 bg-black bg-opacity-70"></div>
         <div class="relative z-10 container mx-auto p-6 flex justify-between items-center">
             <h1 class="text-6xl font-bold text-primary">DEPORTE TOTAL X3</h1>
@@ -45,7 +45,7 @@
         </div>
     </header>
 
-    <!-- Botones ligas -->
+    <!-- Botones ligas rápidas -->
     <div class="container mx-auto p-6">
         <div class="flex flex-wrap gap-4 justify-center mb-12">
             <button class="btn btn-primary rounded-full">NBA</button>
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <!-- Layout principal -->
+    <!-- Layout principal con sidebar -->
     <div class="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div class="lg:col-span-3 space-y-12">
             <!-- Partidos en vivo -->
@@ -86,7 +86,7 @@
             <section>
                 <h2 class="text-4xl font-bold mb-6">Transmisión en Vivo</h2>
                 <div id="liveStream" class="aspect-video bg-black rounded-lg overflow-hidden">
-                    <p class="text-center pt-32 text-gray-400">No hay transmisión ahora. Admin pega embed de YouTube/Twitch.</p>
+                    <p class="text-center pt-32 text-gray-400">No hay transmisión ahora. Admin pega embed.</p>
                 </div>
             </section>
 
@@ -97,26 +97,31 @@
                     <textarea class="textarea textarea-bordered w-full h-32" placeholder="Escribe tu comentario..."></textarea>
                     <button class="btn btn-primary mt-4">Enviar</button>
                     <div class="mt-6 space-y-4">
-                        <p class="chat chat-start">Usuario: ¡Gran partido!</p>
-                        <!-- Más comentarios -->
+                        <p class="chat chat-start">Usuario: ¡Qué partido!</p>
+                        <p class="chat chat-end">Otro: Messi el mejor</p>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- Sidebar noticias -->
+        <!-- Sidebar noticias destacadas -->
         <aside class="space-y-6">
             <h2 class="text-3xl font-bold">NOTICIAS DESTACADAS</h2>
             <div class="space-y-6">
-                <div class="card p-4">
-                    <img src="https://via.placeholder.com/400x200" class="w-full rounded mb-4">
-                    <h4 class="font-bold text-lg">Messi campeón del mundo</h4>
-                    <p class="text-sm">Argentina levanta la copa...</p>
+                <div class="card p-4 shadow-xl">
+                    <img src="https://via.placeholder.com/400x200?text=Messi+Campeón" class="w-full rounded mb-4">
+                    <h4 class="font-bold text-lg">Messi levanta la Copa del Mundo</h4>
+                    <p class="text-sm">Argentina campeón 2022...</p>
                 </div>
-                <div class="card p-4">
-                    <img src="https://via.placeholder.com/400x200" class="w-full rounded mb-4">
-                    <h4 class="font-bold text-lg">NBA finals intensas</h4>
-                    <p class="text-sm">Knicks vs Warriors...</p>
+                <div class="card p-4 shadow-xl">
+                    <img src="https://via.placeholder.com/400x200?text=NBA+Finals" class="w-full rounded mb-4">
+                    <h4 class="font-bold text-lg">Finales NBA intensas</h4>
+                    <p class="text-sm">Warriors vs Celtics...</p>
+                </div>
+                <div class="card p-4 shadow-xl">
+                    <img src="https://via.placeholder.com/400x200?text=NFL+Superbowl" class="w-full rounded mb-4">
+                    <h4 class="font-bold text-lg">Mahomes MVP</h4>
+                    <p class="text-sm">Chiefs campeones...</p>
                 </div>
             </div>
         </aside>
@@ -129,19 +134,19 @@
             <div>
                 <label class="label text-lg">Cambiar Portada (pega URL nueva imagen)</label>
                 <input type="text" id="coverUrlInput" class="input input-bordered w-full" placeholder="URL imagen">
-                <button onclick="changeCover()" class="btn btn-primary mt-4">Cambiar</button>
+                <button onclick="changeCover()" class="btn btn-primary mt-4">Cambiar Portada</button>
             </div>
             <div>
                 <label class="label text-lg">Transmisión en Vivo (pega código embed YouTube/Twitch)</label>
                 <textarea id="streamEmbedInput" class="textarea textarea-bordered w-full h-32" placeholder="<iframe..."></iframe>"></textarea>
-                <button onclick="changeStream()" class="btn btn-primary mt-4">Actualizar</button>
+                <button onclick="changeStream()" class="btn btn-primary mt-4">Actualizar Transmisión</button>
             </div>
         </div>
         <button class="btn btn-secondary mt-8" onclick="firebase.auth().signOut().then(() => location.reload())">Cerrar sesión</button>
     </div>
 
     <script>
-        // Firebase config (tu bloque)
+        // Tu Firebase config
         const firebaseConfig = {
           apiKey: "AIzaSyA-01-N9Q8-v7tsAByiZmuLfTS_PicnVkg",
           authDomain: "deportetotalx3-ce17b.firebaseapp.com",
@@ -159,22 +164,55 @@
             const password = prompt('Contraseña:');
             if (email && password) {
                 firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then(() => document.getElementById('adminPanel').style.display = 'block')
-                    .catch(err => alert('Error: ' + err.message));
+                    .then(() => {
+                        document.getElementById('adminPanel').style.display = 'block';
+                        alert('Entraste');
+                    })
+                    .catch(err => alert('Mala: ' + err.message));
             }
         };
 
-        // Cambiar portada y stream (igual que antes)
+        // Cambiar portada
+        function changeCover() {
+            const url = document.getElementById('coverUrlInput').value.trim();
+            if (url) {
+                document.getElementById('headerPortada').style.backgroundImage = `url('${url}')`;
+                localStorage.setItem('coverUrl', url);
+                alert('Portada cambiada');
+            }
+        }
 
-        // API-Sports key
+        // Cambiar transmisión
+        function changeStream() {
+            const embed = document.getElementById('streamEmbedInput').value.trim();
+            if (embed) {
+                document.getElementById('liveStream').innerHTML = embed;
+                localStorage.setItem('streamEmbed', embed);
+                alert('Transmisión actualizada');
+            }
+        }
+
+        // Carga guardados
+        const defaultCover = 'https://wallpapercave.com/wp/wp12551397.jpg'; // Messi campeón
+        const savedCover = localStorage.getItem('coverUrl') || defaultCover;
+        document.getElementById('headerPortada').style.backgroundImage = `url('${savedCover}')`;
+
+        const savedStream = localStorage.getItem('streamEmbed') || '<p class="text-center pt-32 text-gray-400">No hay transmisión ahora</p>';
+        document.getElementById('liveStream').innerHTML = savedStream;
+
+        // API-Sports
         const apiKey = 'f7966efcd58692979704f59c9f3f7e113';
 
-        // Funciones loadLiveMatches, loadOdds, loadStandings, loadFixtures (cargan reales, cards grandes, etc.)
+        // Carga lives (ejemplo básico, expando si quieres)
+        async function loadLives() {
+            const html = '<div class="card p-8 text-center"><h3 class="text-2xl">Ejemplo Live</h3><p class="text-6xl">2 - 1</p><p>Equipo A vs B - En Vivo</p></div>';
+            document.getElementById('liveMatches').innerHTML = html || '<p>No lives ahora</p>';
+        }
 
-        loadLiveMatches();
-        // Llama las otras funciones
+        loadLives();
 
-        setInterval(loadLiveMatches, 60000);
+        // Más funciones para odds, standings, fixtures (cargan reales si hay)
+
     </script>
 </body>
 </html>
